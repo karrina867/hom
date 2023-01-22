@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="est.js"></script>
+    <title>Document</title>
+</head>
+<style>
+    body{
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .weather{
+        width: 20vw;
+        background-color: rgb(123, 123, 245);
+        color: aliceblue;
+        border-radius: 15px;
+        box-shadow: 2px 2px 15px grey;
+        font-size: 1.5rem;
+    }
+    .weather * {
+        text-align: center;
+    }
+    .weather_container{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .weather_container img{
+        width: 40px;
+        height: 40px;
+    }
+</style>
+<body>
+    <div class="weather">
+        <h2>Погода в городе: <span class="city"></span></h2>
+        <p>Температура: <span class="temp"></span>C
+        </p>
+        <p>Влажность:<span class="humidity">%</span></p>
+        <p>Ветер:<span class="wind"></span>м/с</p>
+        <p class="weather_container" >Погода: <img id='wicon'src="" alt="weather"></p>
+    </div>
+    <script>
+        /*
+        let pass='123';
+        try {
+             if(pass.length < 5){
+                throw 'пароль менее пяти символов'
+             }
+             doSomeone();
+        } catch (error){
+            if(error instanceof TypeError){
+                 console.log('TypeError');
+            }
+            if(error instanceof ReferenceError){
+                 console.log('ReferenceError');
+            }
+            console.log('catch')
+        } finally{ //работает в любом случае
+            console.log('finally');
+        }
+        console.log('ok');
+*/
+        let apiKey = '69eea7577f7bdf59547ca01ebad31937';
+        let city = 'Minsk';
+        let url = `http://api.openweathermap.org/data/2.5/weather?id=15&q=${city}&land=ru&units=metric&appid=${apiKey}`;
+        let resCity = document.querySelector('.city');
+        let resTemp = document.querySelector('.temp');
+        let resHumidity = document.querySelector('.humidity');
+        let resWind = document.querySelector('.wind');
+        let resIcon = document.querySelector('#wicon');
+
+        fetch(url)
+        .then(respons=>{
+            return respons.json();
+        })
+        .then(function(data){
+            console.log(data);
+             showWeather(data);
+        } );
+       
+        function showWeather(res){
+            resCity.innerHTML = res.name;
+            resHumidity.innerHTML = res.main.humidity;
+            resTemp.innerHTML = res.main.temp;
+            resWind.innerHTML = res.wind.speed;
+
+            let iconcode = res.weather[0].icon;
+            let iconUr =  `http://api.openweathermap.org/img/w/${iconcode}.png`;
+            resIcon.src = iconUr;
+        }
+    </script>
+</body>
+</html>
